@@ -59,11 +59,13 @@ local setup = {
   hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ " }, -- hide mapping boilerplate
   show_help = true, -- show help message on the command line when the popup is visible
   triggers = "auto", -- automatically setup triggers
-  -- triggers = {"<leader>"} -- or specify a list manually
+  -- "auto" conflicts with "LspInstallInfo"
+  -- triggers = {"<leader>"}, -- or specify a list manually
   triggers_blacklist = {
     -- list of mode / prefixes that should never be hooked by WhichKey
     -- this is mostly relevant for key maps that start with a native binding
     -- most people should not need to change this
+    n = { "g" },
     i = { "j", "k" },
     v = { "j", "k" },
   },
@@ -85,9 +87,8 @@ local mappings = {
     "Buffers",
   },
   ["e"] = { "<cmd>NvimTreeToggle<cr>", "Explorer" },
-  ["w"] = { "<cmd>w!<CR>", "Save" },
-  ["q"] = { "<cmd>q!<CR>", "Quit" },
-  ["c"] = { "<cmd>Bdelete!<CR>", "Close Buffer" },
+  ["q"] = { "<cmd>Bdelete<CR>", "Close Buffer" },
+  -- ["w"] = { "<cmd>w<CR>", "Save" },
   ["h"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
   ["f"] = {
     "<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown{previewer = false})<cr>",
@@ -105,7 +106,42 @@ local mappings = {
     u = { "<cmd>PackerUpdate<cr>", "Update" },
   },
 
-  g = {
+  l = {
+    name = "LSP",
+    a = { "<cmd>lua vim.lsp.buf.code_action()<CR>", "Code Action" },
+    d = { "<cmd>lua vim.diagnostic.open_float()<CR>", "Line Diagnostics" },
+    D = { "<cmd>Telescope diagnostics<CR>", "Document Diagnostics" },
+    f = { "<cmd>lua vim.lsp.buf.formatting()<CR>", "Format" },
+    h = { "<cmd>lua vim.lsp.buf.hover()<CR>", "Hover" },
+    j = { "<cmd>lua vim.diagnostic.goto_next()<CR>", "Next Diagnostic", },
+    k = { "<cmd>lua vim.diagnostic.goto_prev()<CR>", "Prev Diagnostic", },
+    l = { "<cmd>lua vim.lsp.codelens.run()<CR>", "CodeLens Action" },
+    q = { "<cmd>lua vim.diagnostic.setloclist()<CR>", "Quickfix" },
+    r = { "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename" },
+    -- w = { "<cmd>Telescope lsp_workspace_diagnostics<CR>", "Workspace Diagnostics", },
+    s = { "<cmd>Telescope lsp_document_symbols<CR>", "Document Symbols" },
+    S = { "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", "Workspace Symbols", },
+    z = { "<cmd>LspInfo<CR>", "Info" },
+    Z = { "<cmd>LspInstallInfo<CR>", "Installer Info" },
+  },
+
+  ["/"] = {
+    name = "List/Search",
+    b = {
+      "<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<cr>",
+      "Buffers"
+    },
+    c = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
+    -- c = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
+    h = { "<cmd>Telescope help_tags<cr>", "Find Help" },
+    M = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
+    r = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
+    R = { "<cmd>Telescope registers<cr>", "Registers" },
+    k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
+    C = { "<cmd>Telescope commands<cr>", "Commands" },
+  },
+
+  ["."] = {
     name = "Git",
     g = { "<cmd>lua _LAZYGIT_TOGGLE()<CR>", "Lazygit" },
     j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk" },
@@ -128,50 +164,7 @@ local mappings = {
     },
   },
 
-  l = {
-    name = "LSP",
-    a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
-    d = {
-      "<cmd>Telescope lsp_document_diagnostics<cr>",
-      "Document Diagnostics",
-    },
-    w = {
-      "<cmd>Telescope lsp_workspace_diagnostics<cr>",
-      "Workspace Diagnostics",
-    },
-    f = { "<cmd>lua vim.lsp.buf.formatting()<cr>", "Format" },
-    i = { "<cmd>LspInfo<cr>", "Info" },
-    I = { "<cmd>LspInstallInfo<cr>", "Installer Info" },
-    j = {
-      "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>",
-      "Next Diagnostic",
-    },
-    k = {
-      "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>",
-      "Prev Diagnostic",
-    },
-    l = { "<cmd>lua vim.lsp.codelens.run()<cr>", "CodeLens Action" },
-    q = { "<cmd>lua vim.lsp.diagnostic.set_loclist()<cr>", "Quickfix" },
-    r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
-    s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols" },
-    S = {
-      "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>",
-      "Workspace Symbols",
-    },
-  },
-  s = {
-    name = "Search",
-    b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
-    c = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
-    h = { "<cmd>Telescope help_tags<cr>", "Find Help" },
-    M = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
-    r = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
-    R = { "<cmd>Telescope registers<cr>", "Registers" },
-    k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
-    C = { "<cmd>Telescope commands<cr>", "Commands" },
-  },
-
-  t = {
+  [";"] = {
     name = "Terminal",
     n = { "<cmd>lua _NODE_TOGGLE()<cr>", "Node" },
     u = { "<cmd>lua _NCDU_TOGGLE()<cr>", "NCDU" },
