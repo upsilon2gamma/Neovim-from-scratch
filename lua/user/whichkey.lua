@@ -176,5 +176,23 @@ local mappings = {
   },
 }
 
+local opts_visual = {
+  mode = "v", -- NORMAL mode
+  prefix = "<leader>",
+  buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
+  silent = true, -- use `silent` when creating keymaps
+  noremap = true, -- use `noremap` when creating keymaps
+  nowait = true, -- use `nowait` when creating keymaps
+}
+
+local mappings_visual = {
+  ["c"] = {
+    name = "Comments",
+    c = { "<Plug>(comment_toggle_blockwise_visual)", "Comment block" },
+    C = { "<Plug>(comment_toggle_linewise_visual)", "Comment line" },
+  },
+}
+
 which_key.setup(setup)
 which_key.register(mappings, opts)
+which_key.register(mappings_visual, opts_visual)
